@@ -31,5 +31,5 @@ app.use(readQuizRouter);
 app.use(createQuizRouter);
 
 app.listen(5000, () => {
-    console.log("Listening on port 5000!");
+    console.log("Listening on port 5000");
 });
