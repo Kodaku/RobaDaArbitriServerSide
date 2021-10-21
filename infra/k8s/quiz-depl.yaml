@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: quiz-depl
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: quiz
+  template:
+    metadata:
+      labels:
+        app: quiz
+    spec:
+      containers:
+        - name: quiz
+          image: axelmastroianni/quiz
+          env:
+            # - name: DATABASE
+            #   value: 'mongodb+srv://axel:<PASSWORD>@cluster0.s6xgy.mongodb.net/roba-da-arbitri/quiz?retryWrites=true&w=majority'
+            # - name: DB_PASSWORD
+            #   value: 0bq5pDpHwD2NHCpp
+            - name: QUIZ_MONGO_URI
+              value: 'mongodb://quiz-mongo-srv:27017/quiz'
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: quiz-srv
+spec:
+  selector:
+    app: quiz
+  ports:
+    - name: quiz
+      protocol: TCP
+      port: 5000
+      targetPort: 5000

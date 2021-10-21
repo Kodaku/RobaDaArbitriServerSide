@@ -1,0 +1,41 @@
+[
+    {
+        "quizId": 1,
+        "questionId": 1,
+        "questionText": "Le linee che deliminatano il perimetro del terreno di gioco sono chiamate...",
+        "wrongOptions": [
+            "Linee Laterali e Linee di Fondo",
+            "Linee di Destinazione e Linee di Porta",
+            "Semplicemente Linee"
+        ],
+        "correctOptions": [
+            "Linee Laterali e Linee di Porta"
+        ]
+    },
+    {
+        "quizId": 1,
+        "questionId": 2,
+        "questionText": "Un giocatore A colpisce con un pugno un calciatore B, a gioco fermo. L'arbitro deve...",
+        "wrongOptions": [
+            "Fargli fare la pace",
+            "Richiamarli con autorità",
+            "Guardare e basta, ci pensa l'assistente, se presente"
+        ],
+        "correctOptions": [
+            "Espellere il giocatore A e riprendere il gioco come doveva essere ripreso prima dell'infrazione"
+        ]
+    },
+    {
+        "quizId": 1,
+        "questionId": 3,
+        "questionText": "All'inizio della gara è disponibile un solo pallone invece dei 3 richiesti dal regolamento. L'arbitro deve...",
+        "wrongOptions": [
+            "Impedire che la gara inizi",
+            "Far giocare la gara e nel caso il pallone non sia più disponibile sospendere immediatamente e definitivamente la gara",
+            "Andare alla Decathlon a comprarne uno nuovo"
+        ],
+        "correctOptions": [
+            "Far giocare la gara e nel caso il pallone non sia più disponibile sospendere temporaneamente la gara accordando un tempo ragionevole per procurare un nuovo pallone o recuperare quello corrente"
+        ]
+    }
+]
