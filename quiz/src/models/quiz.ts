@@ -1,6 +1,6 @@
 import mongoose from 'mongoose';
 
-interface QuizAttrs {
+export interface QuizAttrs {
     quizId: number;
     questionId: number;
     questionText: string;
