@@ -1,5 +1,6 @@
 import express from 'express';
 import mongoose from 'mongoose';
+import cors from 'cors';
 import { json } from 'body-parser';
 import { readQuizRouter } from './routes/readQuiz';
 import { createQuizRouter } from './routes/createQuiz';
@@ -10,6 +11,7 @@ import { loadQuizData } from './data/loadQuizData';
 
 const app = express();
 app.use(json());
+app.use(cors());
 
 // if(!process.env.DATABASE) {
 //     throw new Error("Database variable not defined");
@@ -31,9 +33,6 @@ try {
         console.log("Initial Data successfully loaded");
     });
 
-    // for(let i = 0; i < questions.length; i++) {
-    //     console.log(questions[i]);
-    // }
 } catch (err) {
     console.log(err);
 }
