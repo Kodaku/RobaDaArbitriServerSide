@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: questions-depl
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: questions
+  template:
+    metadata:
+      labels:
+        app: questions
+    spec:
+      containers:
+        - name: questions
+          image: axelmastroianni/questions
+          env:
+            # - name: DATABASE
+            #   value: 'mongodb+srv://axel:<PASSWORD>@cluster0.s6xgy.mongodb.net/roba-da-arbitri/questions?retryWrites=true&w=majority'
+            # - name: DB_PASSWORD
+            #   value: 0bq5pDpHwD2NHCpp
+            - name: QUIZ_MONGO_URI
+              value: 'mongodb://questions-mongo-srv:27017/questions'
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: questions-srv
+spec:
+  selector:
+    app: questions
+  ports:
+    - name: questions
+      protocol: TCP
+      port: 5000
+      targetPort: 5000

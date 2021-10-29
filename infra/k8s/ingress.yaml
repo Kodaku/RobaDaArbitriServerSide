@@ -10,10 +10,10 @@ spec:
   - host: robadaarbitri.dev
     http:
       paths:
-      - path: /api/quiz/?(.*)
+      - path: /api/questions/?(.*)
         pathType: Prefix
         backend:
           service:
-            name: quiz-srv
+            name: questions-srv
             port:
               number: 5000

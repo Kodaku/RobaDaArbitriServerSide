@@ -8,8 +8,8 @@ build:
   local:
     push: false
   artifacts:
-    - image: axelmastroianni/quiz
-      context: quiz
+    - image: axelmastroianni/questions
+      context: questions
       docker:
         dockerfile: Dockerfile
       sync:
