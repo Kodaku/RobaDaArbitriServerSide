@@ -1,23 +1,23 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: questions-depl
+  name: users-depl
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: questions
+      app: users
   template:
     metadata:
       labels:
-        app: questions
+        app: users
     spec:
       containers:
-        - name: questions
-          image: axelmastroianni/questions
+        - name: users
+          image: axelmastroianni/users
           env:
             # - name: DATABASE
-            #   value: 'mongodb+srv://axel:<PASSWORD>@cluster0.s6xgy.mongodb.net/roba-da-arbitri/questions?retryWrites=true&w=majority'
+            #   value: 'mongodb+srv://axel:<PASSWORD>@cluster0.s6xgy.mongodb.net/roba-da-arbitri/users?retryWrites=true&w=majority'
             # - name: DB_PASSWORD
             #   value: 0bq5pDpHwD2NHCpp
             - name: NATS_CLIENT_ID
@@ -28,18 +28,18 @@ spec:
               value: 'http://nats-srv:4222'
             - name: NATS_CLUSTER_ID
               value: robadaarbitri
-            - name: QUESTIONS_MONGO_URI
-              value: 'mongodb://questions-mongo-srv:27017/questions'
+            - name: USERS_MONGO_URI
+              value: 'mongodb://users-mongo-srv:27017/users'
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: questions-srv
+  name: users-srv
 spec:
   selector:
-    app: questions
+    app: users
   ports:
-    - name: questions
+    - name: users
       protocol: TCP
       port: 3000
       targetPort: 3000

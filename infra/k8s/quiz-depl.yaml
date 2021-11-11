@@ -1,23 +1,23 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: questions-depl
+  name: quiz-depl
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: questions
+      app: quiz
   template:
     metadata:
       labels:
-        app: questions
+        app: quiz
     spec:
       containers:
-        - name: questions
-          image: axelmastroianni/questions
+        - name: quiz
+          image: axelmastroianni/quiz
           env:
             # - name: DATABASE
-            #   value: 'mongodb+srv://axel:<PASSWORD>@cluster0.s6xgy.mongodb.net/roba-da-arbitri/questions?retryWrites=true&w=majority'
+            #   value: 'mongodb+srv://axel:<PASSWORD>@cluster0.s6xgy.mongodb.net/roba-da-arbitri/quiz?retryWrites=true&w=majority'
             # - name: DB_PASSWORD
             #   value: 0bq5pDpHwD2NHCpp
             - name: NATS_CLIENT_ID
@@ -28,18 +28,18 @@ spec:
               value: 'http://nats-srv:4222'
             - name: NATS_CLUSTER_ID
               value: robadaarbitri
-            - name: QUESTIONS_MONGO_URI
-              value: 'mongodb://questions-mongo-srv:27017/questions'
+            - name: QUIZ_MONGO_URI
+              value: 'mongodb://quiz-mongo-srv:27017/quiz'
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: questions-srv
+  name: quiz-srv
 spec:
   selector:
-    app: questions
+    app: quiz
   ports:
-    - name: questions
+    - name: quiz
       protocol: TCP
       port: 3000
       targetPort: 3000

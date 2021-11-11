@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: quiz-mongo-depl
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: quiz-mongo
+  template:
+    metadata:
+      labels:
+        app: quiz-mongo
+    spec:
+      containers:
+        - name: quiz-mongo
+          image: mongo
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: quiz-mongo-srv
+spec:
+  selector:
+    app: quiz-mongo
+  ports:
+    - name: db
+      protocol: TCP
+      port: 27017
+      targetPort: 27017

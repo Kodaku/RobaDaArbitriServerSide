@@ -16,3 +16,19 @@ build:
         manual:
           - src: 'src/**/.ts'
             dest: .
+    - image: axelmastroianni/quiz
+      context: quiz
+      docker:
+        dockerfile: Dockerfile
+      sync:
+        manual:
+          - src: 'src/**/.ts'
+            dest: .
+    - image: axelmastroianni/users
+      context: users
+      docker:
+        dockerfile: Dockerfile
+      sync:
+        manual:
+          - src: 'src/**/.ts'
+            dest: .

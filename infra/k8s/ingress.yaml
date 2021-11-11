@@ -16,4 +16,18 @@ spec:
           service:
             name: questions-srv
             port:
-              number: 5000
+              number: 3000
+      - path: /api/quiz/?(.*)
+        pathType: Prefix
+        backend:
+          service:
+            name: quiz-srv
+            port:
+              number: 3000
+      - path: /api/users/?(.*)
+        pathType: Prefix
+        backend:
+          service:
+            name: users-srv
+            port:
+              number: 3000

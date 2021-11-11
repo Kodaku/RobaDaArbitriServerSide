@@ -1,8 +1,10 @@
 import mongoose from 'mongoose';
-import { questions } from './data/readQuestionsData';
-import { loadQuestionData } from './data/loadQuestionsData';
 import { natsWrapper } from './nats-wrapper';
 import { app } from './app';
+import { QuestionCreatedListener } from './events/listeners/question-created-listener';
+import { QuestionUpdatedListener } from './events/listeners/question-updated-listener';
+import { UserCreatedListener } from './events/listeners/user-created-listener';
+import { UserUpdatedListener } from './events/listeners/user-updated-listener';
 
 // console.log(questions);
 
@@ -14,7 +16,7 @@ import { app } from './app';
 //     throw new Error("Database password not defined")
 // }
 const start = async () => {
-    if(!process.env.QUESTIONS_MONGO_URI) {
+    if(!process.env.QUIZ_MONGO_URI) {
         throw new Error("Quiz Database not defined");
     }
 
@@ -41,12 +43,14 @@ const start = async () => {
         process.on('SIGINT', () => natsWrapper.client.close());
         process.on('SIGTERM', () => natsWrapper.client.close());
 
+        new QuestionCreatedListener(natsWrapper.client).listen();
+        new QuestionUpdatedListener(natsWrapper.client).listen();
+        new UserCreatedListener(natsWrapper.client).listen();
+        new UserUpdatedListener(natsWrapper.client).listen();
+
         // const DB = process.env.DATABASE.replace('<PASSWORD>', process.env.DB_PASSWORD);
-        mongoose.connect(process.env.QUESTIONS_MONGO_URI, async () => {
-            console.log("Connceted to the QUESTIONS database!");
-            
-            await loadQuestionData(questions);
-            console.log("Initial Data successfully loaded");
+        mongoose.connect(process.env.QUIZ_MONGO_URI, async () => {
+            console.log("Connceted to the QUIZ database!");
         });
 
     } catch (err) {
@@ -54,7 +58,7 @@ const start = async () => {
     }
 
     app.listen(3000, () => {
-        console.log("QUESTIONS Listening on port 3000");
+        console.log("QUIZ Listening on port 3000");
     });
 }
 

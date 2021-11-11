@@ -1,8 +1,8 @@
 import mongoose from 'mongoose';
-import { questions } from './data/readQuestionsData';
-import { loadQuestionData } from './data/loadQuestionsData';
 import { natsWrapper } from './nats-wrapper';
 import { app } from './app';
+import { loadUsersData } from './data/loadUsersData';
+import { users } from './data/readUsersData';
 
 // console.log(questions);
 
@@ -14,7 +14,7 @@ import { app } from './app';
 //     throw new Error("Database password not defined")
 // }
 const start = async () => {
-    if(!process.env.QUESTIONS_MONGO_URI) {
+    if(!process.env.USERS_MONGO_URI) {
         throw new Error("Quiz Database not defined");
     }
 
@@ -42,11 +42,10 @@ const start = async () => {
         process.on('SIGTERM', () => natsWrapper.client.close());
 
         // const DB = process.env.DATABASE.replace('<PASSWORD>', process.env.DB_PASSWORD);
-        mongoose.connect(process.env.QUESTIONS_MONGO_URI, async () => {
-            console.log("Connceted to the QUESTIONS database!");
-            
-            await loadQuestionData(questions);
-            console.log("Initial Data successfully loaded");
+        mongoose.connect(process.env.USERS_MONGO_URI, async () => {
+            console.log("Connceted to the USER database!");
+            await loadUsersData(users);
+            console.log("Initial Users Data Successfully Loaded");
         });
 
     } catch (err) {
@@ -54,7 +53,7 @@ const start = async () => {
     }
 
     app.listen(3000, () => {
-        console.log("QUESTIONS Listening on port 3000");
+        console.log("USERS Listening on port 3000");
     });
 }
 
