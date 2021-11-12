@@ -50,7 +50,7 @@ router.get('/api/quiz/:category', async (req: Request, res: Response) => {
 
     const validQuestions = await query.where('questionCategory').equals(category).exec();
 
-    res.status(200).send(validQuestions[0]);
+    res.status(200).send(validQuestions);
 });
 
 export { router as createQuizRouter };
