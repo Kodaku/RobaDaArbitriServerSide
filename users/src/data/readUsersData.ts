@@ -1,6 +1,6 @@
 import fs from 'fs';
-import { UserAttrs } from '../models/user';
+import { UserType } from '../types';
 
-const users: UserAttrs[] = JSON.parse(fs.readFileSync(`${__dirname}/users.json`, "utf-8"));
+const users: UserType[] = JSON.parse(fs.readFileSync(`${__dirname}/users.json`, "utf-8"));
 
 export { users };

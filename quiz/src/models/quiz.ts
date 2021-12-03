@@ -1,7 +1,7 @@
 import mongoose from 'mongoose';
 import { updateIfCurrentPlugin } from 'mongoose-update-if-current';
 
-export interface QuizAttrs {
+interface QuizAttrs {
     questionsIds: number[];
     wrongQuestionsIds: number[];
     correctQuestionsIds: number[];

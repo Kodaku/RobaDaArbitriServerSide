@@ -1,5 +1,5 @@
 import { Router, Request, Response } from "express";
-import { UserUpdatedPublisher } from "../events/user-updated-publisher";
+import { UserUpdatedPublisher } from "../events/publishers/user-updated-publisher";
 import { User } from "../models/user";
 import { natsWrapper } from "../nats-wrapper";
 

@@ -1,6 +1,6 @@
 import fs from 'fs';
-import { QuestionAttrs } from '../models/question';
+import { QuestionType } from '../types';
 
-const questions: QuestionAttrs[] = JSON.parse(fs.readFileSync(`${__dirname}/questions.json`, "utf-8"));
+const questions: QuestionType[] = JSON.parse(fs.readFileSync(`${__dirname}/questions.json`, "utf-8"));
 
 export { questions };

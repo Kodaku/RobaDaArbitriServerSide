@@ -13,14 +13,12 @@ export class UserUpdatedListener extends Listener<UserUpdatedEvent> {
         const user = await User.findByEvent(data);
 
         if (!user) {
-            console.log("User not found");
-            msg.ack();
-            return;
+            throw new Error("User Not Found");
         }
 
-        user!.set({ userName, email, executedQuestionIds, executedQuizIds });
+        user.set({ userName, email, executedQuestionIds, executedQuizIds });
 
-        await user!.save();
+        await user.save();
 
         msg.ack();
     }

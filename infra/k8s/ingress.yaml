@@ -1,33 +1,33 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: ingress-service
-  annotations:
-    kubernetes.io/ingress.class: nginx
-    nginx.ingress.kubernetes.io/use-regex: 'true'
+    name: ingress-service
+    annotations:
+        kubernetes.io/ingress.class: nginx
+        nginx.ingress.kubernetes.io/use-regex: "true"
 spec:
-  rules:
-  - host: robadaarbitri.dev
-    http:
-      paths:
-      - path: /api/questions/?(.*)
-        pathType: Prefix
-        backend:
-          service:
-            name: questions-srv
-            port:
-              number: 3000
-      - path: /api/quiz/?(.*)
-        pathType: Prefix
-        backend:
-          service:
-            name: quiz-srv
-            port:
-              number: 3000
-      - path: /api/users/?(.*)
-        pathType: Prefix
-        backend:
-          service:
-            name: users-srv
-            port:
-              number: 3000
+    rules:
+        - host: robadaarbitri.dev
+          http:
+              paths:
+                  - path: /api/questions/?(.*)
+                    pathType: Prefix
+                    backend:
+                        service:
+                            name: questions-srv
+                            port:
+                                number: 5000
+                  - path: /api/quiz/?(.*)
+                    pathType: Prefix
+                    backend:
+                        service:
+                            name: quiz-srv
+                            port:
+                                number: 5000
+                  - path: /api/users/?(.*)
+                    pathType: Prefix
+                    backend:
+                        service:
+                            name: users-srv
+                            port:
+                                number: 5000

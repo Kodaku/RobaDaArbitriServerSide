@@ -1,7 +1,7 @@
 import mongoose from 'mongoose';
 import { updateIfCurrentPlugin } from 'mongoose-update-if-current';
 
-export interface UserAttrs {
+interface UserAttrs {
     userName: string;
     email: string;
     executedQuestionIds: number[];

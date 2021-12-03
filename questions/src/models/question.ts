@@ -1,7 +1,7 @@
 import mongoose from 'mongoose';
 import { updateIfCurrentPlugin } from 'mongoose-update-if-current';
 
-export interface QuestionAttrs {
+interface QuestionAttrs {
     questionId: number;
     questionText: string;
     questionCategory: string;

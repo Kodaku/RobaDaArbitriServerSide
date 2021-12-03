@@ -1,7 +1,7 @@
 import mongoose from 'mongoose';
 import { updateIfCurrentPlugin } from 'mongoose-update-if-current';
 
-export interface UserAttrs {
+interface UserAttrs {
     id: string;
     userName: string;
     email: string;
@@ -61,6 +61,7 @@ userSchema.pre('save', async function (next) {
 
 userSchema.statics.build = (attrs: UserAttrs) => {
     return new User({
+        _id: attrs.id,
         userName: attrs.userName,
         email: attrs.email,
         executedQuestionIds: attrs.executedQuestionIds,

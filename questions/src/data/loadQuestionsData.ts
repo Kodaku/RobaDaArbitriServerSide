@@ -1,11 +1,11 @@
 import { QuestionCreatedPublisher } from "../events/publishers/question-created-publisher";
-import { QuestionAttrs } from "../models/question";
 import { Question } from "../models/question";
 import { natsWrapper } from "../nats-wrapper";
+import { QuestionType } from "../types";
 
-export const loadQuestionData = async (questions: QuestionAttrs[]) => {
+export const loadQuestionData = async (questions: QuestionType[]) => {
     for(let i = 0; i < questions.length; i++) {
-        const question: QuestionAttrs = questions[i];
+        const question: QuestionType = questions[i];
         // console.log(`Loading question ${question.questionText}`);
         var query = Question.find({});
         var resp = await query.where('questionId').equals(question.questionId).exec();

@@ -1,10 +1,11 @@
-import { UserCreatedPublisher } from "../events/user-created-publisher";
-import { User, UserAttrs } from "../models/user";
+import { UserCreatedPublisher } from "../events/publishers/user-created-publisher";
+import { User } from "../models/user";
 import { natsWrapper } from "../nats-wrapper";
+import { UserType } from "../types";
 
-export const loadUsersData = async (users: UserAttrs[]) => {
+export const loadUsersData = async (users: UserType[]) => {
     for(let i = 0; i < users.length; i++) {
-        const user: UserAttrs = users[i];
+        const user: UserType = users[i];
         // console.log(`Loading user ${user.questionText}`);
         var query = User.find({});
         var resp = await query.where('userName').equals(user.userName).exec();

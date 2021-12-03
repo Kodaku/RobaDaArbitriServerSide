@@ -1,45 +1,45 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: questions-depl
+    name: questions-depl
 spec:
-  replicas: 1
-  selector:
-    matchLabels:
-      app: questions
-  template:
-    metadata:
-      labels:
-        app: questions
-    spec:
-      containers:
-        - name: questions
-          image: axelmastroianni/questions
-          env:
-            # - name: DATABASE
-            #   value: 'mongodb+srv://axel:<PASSWORD>@cluster0.s6xgy.mongodb.net/roba-da-arbitri/questions?retryWrites=true&w=majority'
-            # - name: DB_PASSWORD
-            #   value: 0bq5pDpHwD2NHCpp
-            - name: NATS_CLIENT_ID
-              valueFrom:
-                fieldRef:
-                  fieldPath: metadata.name
-            - name: NATS_URL
-              value: 'http://nats-srv:4222'
-            - name: NATS_CLUSTER_ID
-              value: robadaarbitri
-            - name: QUESTIONS_MONGO_URI
-              value: 'mongodb://questions-mongo-srv:27017/questions'
+    replicas: 1
+    selector:
+        matchLabels:
+            app: questions
+    template:
+        metadata:
+            labels:
+                app: questions
+        spec:
+            containers:
+                - name: questions
+                  image: axelmastroianni/questions
+                  env:
+                      # - name: DATABASE
+                      #   value: 'mongodb+srv://axel:<PASSWORD>@cluster0.s6xgy.mongodb.net/roba-da-arbitri/questions?retryWrites=true&w=majority'
+                      # - name: DB_PASSWORD
+                      #   value: 0bq5pDpHwD2NHCpp
+                      - name: NATS_CLIENT_ID
+                        valueFrom:
+                            fieldRef:
+                                fieldPath: metadata.name
+                      - name: NATS_URL
+                        value: "http://nats-srv:4222"
+                      - name: NATS_CLUSTER_ID
+                        value: robadaarbitri
+                      - name: QUESTIONS_MONGO_URI
+                        value: "mongodb://questions-mongo-srv:27017/questions"
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: questions-srv
+    name: questions-srv
 spec:
-  selector:
-    app: questions
-  ports:
-    - name: questions
-      protocol: TCP
-      port: 3000
-      targetPort: 3000
+    selector:
+        app: questions
+    ports:
+        - name: questions
+          protocol: TCP
+          port: 5000
+          targetPort: 5000

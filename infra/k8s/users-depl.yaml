@@ -1,45 +1,45 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: users-depl
+    name: users-depl
 spec:
-  replicas: 1
-  selector:
-    matchLabels:
-      app: users
-  template:
-    metadata:
-      labels:
-        app: users
-    spec:
-      containers:
-        - name: users
-          image: axelmastroianni/users
-          env:
-            # - name: DATABASE
-            #   value: 'mongodb+srv://axel:<PASSWORD>@cluster0.s6xgy.mongodb.net/roba-da-arbitri/users?retryWrites=true&w=majority'
-            # - name: DB_PASSWORD
-            #   value: 0bq5pDpHwD2NHCpp
-            - name: NATS_CLIENT_ID
-              valueFrom:
-                fieldRef:
-                  fieldPath: metadata.name
-            - name: NATS_URL
-              value: 'http://nats-srv:4222'
-            - name: NATS_CLUSTER_ID
-              value: robadaarbitri
-            - name: USERS_MONGO_URI
-              value: 'mongodb://users-mongo-srv:27017/users'
+    replicas: 1
+    selector:
+        matchLabels:
+            app: users
+    template:
+        metadata:
+            labels:
+                app: users
+        spec:
+            containers:
+                - name: users
+                  image: axelmastroianni/users
+                  env:
+                      # - name: DATABASE
+                      #   value: 'mongodb+srv://axel:<PASSWORD>@cluster0.s6xgy.mongodb.net/roba-da-arbitri/users?retryWrites=true&w=majority'
+                      # - name: DB_PASSWORD
+                      #   value: 0bq5pDpHwD2NHCpp
+                      - name: NATS_CLIENT_ID
+                        valueFrom:
+                            fieldRef:
+                                fieldPath: metadata.name
+                      - name: NATS_URL
+                        value: "http://nats-srv:4222"
+                      - name: NATS_CLUSTER_ID
+                        value: robadaarbitri
+                      - name: USERS_MONGO_URI
+                        value: "mongodb://users-mongo-srv:27017/users"
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: users-srv
+    name: users-srv
 spec:
-  selector:
-    app: users
-  ports:
-    - name: users
-      protocol: TCP
-      port: 3000
-      targetPort: 3000
+    selector:
+        app: users
+    ports:
+        - name: users
+          protocol: TCP
+          port: 5000
+          targetPort: 5000
