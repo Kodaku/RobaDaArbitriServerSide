@@ -59,15 +59,24 @@ router.get("/api/quiz/generic/:userId", async (req: Request, res: Response) => {
         const questionIndex: number = Math.floor(
             Math.random() * totalQuestions
         );
-        const questionId = availableQuestionsIds[questionIndex];
-        quizQuestionsIds.push(questionId);
-        executedQuestionIds.push(questionId);
+        const index = quizQuestionsIds.findIndex(
+            (quizQuestionId) => questionIndex === quizQuestionId - 1
+        );
+        console.log(questionIndex);
+        if (index < 0) {
+            const questionId = availableQuestionsIds[questionIndex];
+            quizQuestionsIds.push(questionId);
+            executedQuestionIds.push(questionId);
+        } else {
+            i--;
+        }
     }
 
     const quiz = Quiz.build({
         questionsIds: quizQuestionsIds,
         wrongQuestionsIds: [],
         correctQuestionsIds: [],
+        userAnswers: [],
     });
 
     await quiz.save();
@@ -100,8 +109,10 @@ router.get("/api/quiz/generic/:userId", async (req: Request, res: Response) => {
     const quizQuestions = [];
 
     for (let i = 0; i < quizQuestionsIds.length; i++) {
-        const question = await Question.find({questionId: quizQuestionsIds[i]});
-        quizQuestions.push(question);
+        const question = await Question.find({
+            questionId: quizQuestionsIds[i],
+        });
+        quizQuestions.push(question[0]);
     }
 
     res.status(200).json({
@@ -136,6 +147,7 @@ router.post("/api/quiz/by-category", async (req: Request, res: Response) => {
         questionsIds: questionsIds,
         wrongQuestionsIds: [],
         correctQuestionsIds: [],
+        userAnswers: [],
     });
 
     await quiz.save();
@@ -144,7 +156,7 @@ router.post("/api/quiz/by-category", async (req: Request, res: Response) => {
 
     for (let i = 0; i < questionsIds.length; i++) {
         const question = await Question.find({ questionId: questionsIds[i] });
-        quizQuestions.push(question);
+        quizQuestions.push(question[0]);
     }
 
     res.status(200).json({

@@ -19,8 +19,10 @@ router.post(
 
         let correctQuestionsIds = quiz.correctQuestionsIds;
         let wrongQuestionsIds = quiz.wrongQuestionsIds;
+        let userAnswers = quiz.userAnswers;
 
         const answers: Answer[] = req.body as Answer[];
+        console.log(answers);
 
         for (let i = 0; i < answers.length; i++) {
             const answer = answers[i];
@@ -29,11 +31,13 @@ router.post(
             } else {
                 wrongQuestionsIds.push(answer.questionId);
             }
+            userAnswers.push(answer.userAnswer);
         }
 
         quiz.set({
             correctQuestionIds: correctQuestionsIds,
             wrongQuestionsIds: wrongQuestionsIds,
+            userAnswers: userAnswers,
         });
 
         await quiz.save();

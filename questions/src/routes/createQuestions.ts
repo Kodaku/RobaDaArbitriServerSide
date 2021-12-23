@@ -8,28 +8,6 @@ import { questions } from "../data/readQuestionsData";
 const router = Router();
 
 router.get("/api/questions/create", async (req: Request, res: Response) => {
-    // const { questionId, questionText, questionCategory, wrongOptions, correctOptions } = req.body;
-
-    // const question = Question.build({
-    //     questionId,
-    //     questionText,
-    //     questionCategory,
-    //     wrongOptions,
-    //     correctOptions
-    // });
-
-    // await question.save();
-    // new QuestionCreatedPublisher(natsWrapper.client).publish({
-    //     id: question.id,
-    //     version: question.version,
-    //     questionId: question.questionId,
-    //     questionText: question.questionText,
-    //     questionCategory: question.questionCategory,
-    //     wrongOptions: question.wrongOptions,
-    //     correctOptions: question.correctOptions
-    // });
-
-    // res.status(201).send(question);
     const questionsLoaded = [];
     for (let i = 0; i < questions.length; i++) {
         const question: QuestionType = questions[i];
@@ -49,13 +27,13 @@ router.get("/api/questions/create", async (req: Request, res: Response) => {
             questionCategory: question.questionCategory
                 .replace(/\s/g, "")
                 .toLowerCase(),
-            wrongOptions: question.wrongOptions,
-            correctOptions: question.correctOptions,
+            wrongOptions: question.wrongAnswers,
+            correctOptions: question.correctAnswers,
+            questionOptions: question.questionOptions,
         });
 
         await questionToSave.save();
 
-        //TODO: Publish the event about having created a question
         new QuestionCreatedPublisher(natsWrapper.client).publish({
             id: questionToSave.id,
             version: questionToSave.version,
@@ -64,12 +42,44 @@ router.get("/api/questions/create", async (req: Request, res: Response) => {
             questionCategory: questionToSave.questionCategory,
             wrongOptions: questionToSave.wrongOptions,
             correctOptions: questionToSave.correctOptions,
+            questionOptions: questionToSave.questionOptions,
         });
 
         questionsLoaded.push(questionToSave);
     }
 
     res.status(200).send(questionsLoaded);
+});
+
+router.post("/api/questions/add", async (req: Request, res: Response) => {
+    const {
+        questionId,
+        questionText,
+        questionCategory,
+        wrongOptions,
+        correctOptions,
+        questionOptions,
+    } = req.body;
+    const question = Question.build({
+        questionId,
+        questionText,
+        questionCategory,
+        wrongOptions,
+        correctOptions,
+        questionOptions,
+    });
+    await question.save();
+    new QuestionCreatedPublisher(natsWrapper.client).publish({
+        id: question.id,
+        version: question.version,
+        questionId: question.questionId,
+        questionText: question.questionText,
+        questionCategory: question.questionCategory,
+        wrongOptions: question.wrongOptions,
+        correctOptions: question.correctOptions,
+        questionOptions: question.questionOptions,
+    });
+    res.status(201).send(question);
 });
 
 export { router as createQuestionRouter };

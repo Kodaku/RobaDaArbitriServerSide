@@ -5,6 +5,8 @@ import { QuestionCreatedListener } from "./events/listeners/question-created-lis
 import { QuestionUpdatedListener } from "./events/listeners/question-updated-listener";
 import { UserCreatedListener } from "./events/listeners/user-created-listener";
 import { UserUpdatedListener } from "./events/listeners/user-updated-listener";
+import { QuestionDeletedListener } from "./events/listeners/question-deleted-listener";
+import { UserDeletedListener } from "./events/listeners/user-deleted-listener";
 
 // console.log(questions);
 
@@ -49,8 +51,10 @@ const start = async () => {
 
         new QuestionCreatedListener(natsWrapper.client).listen();
         new QuestionUpdatedListener(natsWrapper.client).listen();
+        new QuestionDeletedListener(natsWrapper.client).listen();
         new UserCreatedListener(natsWrapper.client).listen();
         new UserUpdatedListener(natsWrapper.client).listen();
+        new UserDeletedListener(natsWrapper.client).listen();
 
         // const DB = process.env.DATABASE.replace('<PASSWORD>', process.env.DB_PASSWORD);
         mongoose.connect(process.env.QUIZ_MONGO_URI, async () => {

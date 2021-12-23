@@ -4,7 +4,8 @@ export interface QuestionType {
     questionText: string;
     questionCategory: string;
     wrongOptions: string[];
-    correctOptions: string[];
+    correctOptions: string;
+    questionOptions: string[];
 }
 
 export interface QuizType {
@@ -24,4 +25,5 @@ export interface UserType {
 export interface Answer {
     questionId: number;
     isCorrect: boolean;
+    userAnswer: string;
 }

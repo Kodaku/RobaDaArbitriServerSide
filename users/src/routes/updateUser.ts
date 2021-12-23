@@ -5,7 +5,7 @@ import { natsWrapper } from "../nats-wrapper";
 
 const router = Router();
 
-router.post("/api/user/:id", async (req: Request, res: Response) => {
+router.post("/api/users/:id", async (req: Request, res: Response) => {
     const id = req.params.id;
     const { userName, email, executedQuestionIds, executedQuizIds } = req.body;
 
@@ -19,7 +19,7 @@ router.post("/api/user/:id", async (req: Request, res: Response) => {
         userName,
         email,
         executedQuestionIds,
-        executedQuizIds
+        executedQuizIds,
     });
 
     await user.save();
@@ -27,10 +27,10 @@ router.post("/api/user/:id", async (req: Request, res: Response) => {
     new UserUpdatedPublisher(natsWrapper.client).publish({
         id: user.id,
         version: user.version,
-        userName: user.userName,
-        email: user.email,
-        executedQuestionIds: user.executedQuestionIds,
-        executedQuizIds: user.executedQuizIds
+        userName: userName,
+        email: email,
+        executedQuestionIds: executedQuestionIds,
+        executedQuizIds: executedQuizIds,
     });
 
     res.status(200).send(user);

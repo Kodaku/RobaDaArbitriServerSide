@@ -4,22 +4,27 @@ import { natsWrapper } from "../nats-wrapper";
 import { QuestionType } from "../types";
 
 export const loadQuestionData = async (questions: QuestionType[]) => {
-    for(let i = 0; i < questions.length; i++) {
+    for (let i = 0; i < questions.length; i++) {
         const question: QuestionType = questions[i];
         // console.log(`Loading question ${question.questionText}`);
         var query = Question.find({});
-        var resp = await query.where('questionId').equals(question.questionId).exec();
-        if(resp[0])
-        {
+        var resp = await query
+            .where("questionId")
+            .equals(question.questionId)
+            .exec();
+        if (resp[0]) {
             console.log("This data is already in the DB");
             continue;
         }
         const questionToSave = Question.build({
             questionId: question.questionId,
             questionText: question.questionText,
-            questionCategory: question.questionCategory.replace(/\s/g, "").toLowerCase(),
-            wrongOptions: question.wrongOptions,
-            correctOptions: question.correctOptions
+            questionCategory: question.questionCategory
+                .replace(/\s/g, "")
+                .toLowerCase(),
+            wrongOptions: question.wrongAnswers,
+            correctOptions: question.correctAnswers,
+            questionOptions: question.questionOptions,
         });
 
         await questionToSave.save();
@@ -32,7 +37,8 @@ export const loadQuestionData = async (questions: QuestionType[]) => {
             questionText: questionToSave.questionText,
             questionCategory: questionToSave.questionCategory,
             wrongOptions: questionToSave.wrongOptions,
-            correctOptions: questionToSave.correctOptions
+            correctOptions: questionToSave.correctOptions,
+            questionOptions: questionToSave.questionOptions,
         });
     }
-}
+};
