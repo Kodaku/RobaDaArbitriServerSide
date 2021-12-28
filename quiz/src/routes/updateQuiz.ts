@@ -31,7 +31,11 @@ router.post(
             } else {
                 wrongQuestionsIds.push(answer.questionId);
             }
-            userAnswers.push(answer.userAnswer);
+            if (answer.userAnswer) {
+                userAnswers.push(answer.userAnswer);
+            } else {
+                userAnswers.push("NotAnswered");
+            }
         }
 
         quiz.set({

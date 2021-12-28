@@ -25,5 +25,5 @@ export interface UserType {
 export interface Answer {
     questionId: number;
     isCorrect: boolean;
-    userAnswer: string;
+    userAnswer?: string;
 }
