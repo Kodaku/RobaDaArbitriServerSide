@@ -40,6 +40,7 @@ router.get("/api/users/create", async (req: Request, res: Response) => {
             continue;
         }
         const userToSave = User.build({
+            firebaseId: "",
             userName: user.userName,
             email: user.email,
             executedQuestionIds: user.executedQuestionIds,
@@ -63,8 +64,9 @@ router.get("/api/users/create", async (req: Request, res: Response) => {
 });
 
 router.post("/api/users/add", async (req: Request, res: Response) => {
-    const { userName, email } = req.body;
+    const { firebaseId, userName, email } = req.body;
     const user = User.build({
+        firebaseId,
         userName,
         email,
         executedQuestionIds: [],
@@ -80,6 +82,6 @@ router.post("/api/users/add", async (req: Request, res: Response) => {
         executedQuizIds: user.executedQuizIds,
     });
     res.status(201).send(user);
-})
+});
 
 export { router as createUserRouter };
