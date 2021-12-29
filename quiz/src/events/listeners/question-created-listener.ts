@@ -26,6 +26,7 @@ export class QuestionCreatedListener extends Listener<QuestionCreatedEvent> {
             wrongOptions,
             correctOptions,
             questionOptions,
+            userAnswer: "NotAnswered",
         });
 
         await question.save();

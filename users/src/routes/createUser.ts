@@ -47,6 +47,8 @@ router.get("/api/users/create", async (req: Request, res: Response) => {
             executedQuizIds: user.executedQuizIds,
         });
 
+        console.log(userToSave);
+
         await userToSave.save();
 
         new UserCreatedPublisher(natsWrapper.client).publish({

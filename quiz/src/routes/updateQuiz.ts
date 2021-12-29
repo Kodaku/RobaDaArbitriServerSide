@@ -1,4 +1,5 @@
 import { Router, Request, Response } from "express";
+import { Question } from "../models/question";
 import { Quiz } from "../models/quiz";
 import { Answer } from "../types";
 
@@ -26,6 +27,14 @@ router.post(
 
         for (let i = 0; i < answers.length; i++) {
             const answer = answers[i];
+            const question = await Question.find({})
+                .where("questionId")
+                .equals(answer.questionId)
+                .exec();
+            if (question[0]) {
+                question[0].set({ userAnswer: answer.userAnswer });
+                await question[0].save();
+            }
             if (answer.isCorrect) {
                 correctQuestionsIds.push(answer.questionId);
             } else {
