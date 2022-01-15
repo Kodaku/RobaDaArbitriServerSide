@@ -15,6 +15,7 @@ router.post(
             wrongOptions,
             correctOptions,
             questionOptions,
+            answerLink,
         } = req.body;
         console.log("Question body: ", req.body);
         const requestQuestionId = parseInt(req.params.questionId);
@@ -33,6 +34,7 @@ router.post(
             wrongOptions: wrongOptions,
             correctOptions: correctOptions,
             questionOptions: questionOptions,
+            answerLink: answerLink,
         });
 
         await question.save();
@@ -45,6 +47,7 @@ router.post(
             wrongOptions: question.wrongOptions,
             correctOptions: question.correctOptions,
             questionOptions: question.questionOptions,
+            answerLink: question.answerLink,
         });
 
         res.status(200).send(question);

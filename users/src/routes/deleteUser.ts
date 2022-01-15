@@ -17,11 +17,14 @@ router.get("/api/users/delete/:userId", async (req: Request, res: Response) => {
 
     new UserDeletedPublisher(natsWrapper.client).publish({
         id: result.id,
+        firebaseId: result.firebaseId,
         version: result.version,
         userName: result.userName,
         email: result.email,
         executedQuestionIds: result.executedQuestionIds,
-        executedQuizIds: result.executedQuizIds,
+        notExecutedQuizIds: result.notExecutedQuizIds,
+        executedQuizzes: result.executedQuizzes,
+        wrongQuestions: result.wrongQuestions,
     });
 
     res.status(200).send(result);

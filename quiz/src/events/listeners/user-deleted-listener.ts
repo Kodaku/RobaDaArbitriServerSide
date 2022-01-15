@@ -8,8 +8,7 @@ export class UserDeletedListener extends Listener<UserDeletedEvent> {
     queueGroupName: string = queueGroupName;
 
     async onMessage(data: UserDeletedEvent["data"], msg: Message) {
-        const { id, userName, email, executedQuestionIds, executedQuizIds } =
-            data;
+        const { id } = data;
 
         const result = await User.findByIdAndDelete(id);
 

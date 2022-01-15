@@ -1,12 +1,16 @@
 import mongoose from "mongoose";
 import { updateIfCurrentPlugin } from "mongoose-update-if-current";
+import { QuestionDoc } from "./question";
+import { QuizDoc } from "./quiz";
 
 interface UserAttrs {
     firebaseId: string;
     userName: string;
     email: string;
     executedQuestionIds: number[];
-    executedQuizIds: string[];
+    notExecutedQuizIds: string[];
+    executedQuizzes: QuizDoc[];
+    wrongQuestions: QuestionDoc[];
 }
 
 interface UserModel extends mongoose.Model<UserDoc> {
@@ -22,7 +26,9 @@ interface UserDoc extends mongoose.Document {
     userName: string;
     email: string;
     executedQuestionIds: number[];
-    executedQuizIds: string[];
+    notExecutedQuizIds: string[];
+    executedQuizzes: QuizDoc[];
+    wrongQuestions: QuestionDoc[];
     version: number;
 }
 
@@ -45,8 +51,18 @@ const userSchema = new mongoose.Schema(
             type: [Number],
             required: true,
         },
-        executedQuizIds: {
+        notExecutedQuizIds: {
             type: [String],
+            required: true,
+        },
+        executedQuizzes: {
+            type: [mongoose.Schema.Types.ObjectId],
+            ref: "Quiz",
+            required: true,
+        },
+        wrongQuestions: {
+            type: [mongoose.Schema.Types.ObjectId],
+            ref: "Question",
             required: true,
         },
     },
@@ -73,7 +89,9 @@ userSchema.statics.build = (attrs: UserAttrs) => {
         userName: attrs.userName,
         email: attrs.email,
         executedQuestionIds: attrs.executedQuestionIds,
-        executedQuizIds: attrs.executedQuizIds,
+        notExecutedQuizIds: attrs.notExecutedQuizIds,
+        executedQuizzes: attrs.executedQuizzes,
+        wrongQuestions: attrs.wrongQuestions,
     });
 };
 

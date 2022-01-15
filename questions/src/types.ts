@@ -5,4 +5,5 @@ export interface QuestionType {
     wrongAnswers: string[];
     correctAnswers: string;
     questionOptions: string[];
+    answerLink: string;
 }

@@ -9,8 +9,15 @@ export class UserUpdatedListener extends Listener<UserUpdatedEvent> {
 
     async onMessage(data: UserUpdatedEvent["data"], msg: Message) {
         // console.log(data);
-        const { id, userName, email, executedQuestionIds, executedQuizIds } =
-            data;
+        const {
+            firebaseId,
+            userName,
+            email,
+            executedQuestionIds,
+            notExecutedQuizIds,
+            executedQuizzes,
+            wrongQuestions,
+        } = data;
 
         const user = await User.findByEvent(data);
 
@@ -20,7 +27,15 @@ export class UserUpdatedListener extends Listener<UserUpdatedEvent> {
             return;
         }
 
-        user.set({ userName, email, executedQuestionIds, executedQuizIds });
+        user.set({
+            firebaseId,
+            userName,
+            email,
+            executedQuestionIds,
+            notExecutedQuizIds,
+            executedQuizzes,
+            wrongQuestions,
+        });
 
         await user.save();
 

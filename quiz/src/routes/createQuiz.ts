@@ -1,5 +1,5 @@
 import { Router, Request, Response } from "express";
-import { Question } from "../models/question";
+import { Question, QuestionDoc } from "../models/question";
 import { Quiz } from "../models/quiz";
 import {
     allQuestionsIds,
@@ -8,11 +8,13 @@ import {
 import { User } from "../models/user";
 import { UserUpdatedPublisher } from "../events/publishers/user-updated-publisher";
 import { natsWrapper } from "../nats-wrapper";
+import { QuizCreatedPublisher } from "../events/publishers/quiz-created-publisher";
 
 const router = Router();
 
 router.get("/api/quiz/generic/:userId", async (req: Request, res: Response) => {
     const quizQuestionsIds: number[] = [];
+    const quizQuestions: QuestionDoc[] = [];
 
     const userId = req.params.userId;
 
@@ -22,20 +24,12 @@ router.get("/api/quiz/generic/:userId", async (req: Request, res: Response) => {
         throw new Error("User Not Found");
     }
 
+    console.log(user);
+
     let executedQuestionIds = user.executedQuestionIds;
-    let executedQuizIds = user.executedQuizIds;
+    let notExecutedQuizIds = user.notExecutedQuizIds;
 
     if (allQuestionsIds.length - executedQuestionIds.length < 20) {
-        // user.set({ executedQuestionIds: [] });
-        // await user.save();
-        // new UserUpdatedPublisher(natsWrapper.client).publish({
-        //     id: user.id,
-        //     version: user.version,
-        //     userName: user.userName,
-        //     email: user.email,
-        //     executedQuestionIds: user.executedQuestionIds,
-        //     executedQuizIds: user.executedQuizIds
-        // });
         executedQuestionIds = [];
     }
 
@@ -62,9 +56,13 @@ router.get("/api/quiz/generic/:userId", async (req: Request, res: Response) => {
         const index = quizQuestionsIds.findIndex(
             (quizQuestionId) => questionIndex === quizQuestionId - 1
         );
-        console.log(questionIndex);
+        // console.log(questionIndex);
         if (index < 0) {
             const questionId = availableQuestionsIds[questionIndex];
+            const question = await Question.find({
+                questionId: questionId,
+            });
+            quizQuestions.push(question[0]);
             quizQuestionsIds.push(questionId);
             executedQuestionIds.push(questionId);
         } else {
@@ -73,31 +71,50 @@ router.get("/api/quiz/generic/:userId", async (req: Request, res: Response) => {
     }
 
     const quiz = Quiz.build({
-        questionsIds: quizQuestionsIds,
-        wrongQuestionsIds: [],
-        correctQuestionsIds: [],
+        ownerId: userId,
+        wrongQuestions: [],
+        correctQuestions: [],
+        notAnsweredQuestions: [],
+        quizQuestions: quizQuestions,
         userAnswers: [],
     });
 
+    // quiz.populate("quizQuestions");
+
     await quiz.save();
 
-    executedQuizIds.push(quiz.id);
+    // executedQuizzes.push(quiz);
+    notExecutedQuizIds.push(quiz.id);
 
     user.set({
         executedQuestionIds: executedQuestionIds,
-        executedQuizIds: executedQuizIds,
+        notExecutedQuizIds: notExecutedQuizIds,
     });
 
     await user.save();
 
-    new UserUpdatedPublisher(natsWrapper.client).publish({
-        id: user.id,
-        version: user.version,
-        userName: user.userName,
-        email: user.email,
-        executedQuestionIds: user.executedQuestionIds,
-        executedQuizIds: user.executedQuizIds,
+    new QuizCreatedPublisher(natsWrapper.client).publish({
+        id: quiz.id,
+        version: quiz.version,
+        ownerId: quiz.ownerId,
+        wrongQuestions: quiz.wrongQuestions,
+        correctQuestions: quiz.correctQuestions,
+        notAnsweredQuestions: quiz.notAnsweredQuestions,
+        quizQuestions: quiz.quizQuestions,
+        userAnswers: quiz.userAnswers,
     });
+
+    // new UserUpdatedPublisher(natsWrapper.client).publish({
+    //     id: user.id,
+    //     firebaseId: user.firebaseId,
+    //     version: user.version,
+    //     userName: user.userName,
+    //     email: user.email,
+    //     executedQuestionIds: user.executedQuestionIds,
+    //     notExecutedQuizIds: user.notExecutedQuizIds,
+    //     wrongQuestions: user.wrongQuestions,
+    //     executedQuizzes: user.executedQuizzes,
+    // });
 
     // const quizQuestions = [];
 
@@ -105,15 +122,6 @@ router.get("/api/quiz/generic/:userId", async (req: Request, res: Response) => {
     //     const question = await Question.find({}).where('questionId').equals(quizQuestionsIds[i]).exec();
     //     quizQuestions.push(question[0]);
     // }
-
-    const quizQuestions = [];
-
-    for (let i = 0; i < quizQuestionsIds.length; i++) {
-        const question = await Question.find({
-            questionId: quizQuestionsIds[i],
-        });
-        quizQuestions.push(question[0]);
-    }
 
     res.status(200).json({
         quiz: quiz,
@@ -128,8 +136,8 @@ router.post("/api/quiz/by-category", async (req: Request, res: Response) => {
     console.log(categories);
     console.log(req.body);
 
-    const validQuestions = [];
     const questionsIds = [];
+    const quizQuestions = [];
 
     for (let i = 0; i < categories.length; i++) {
         var query = Question.find({});
@@ -138,29 +146,28 @@ router.post("/api/quiz/by-category", async (req: Request, res: Response) => {
             .equals(categories[i])
             .exec();
         for (let j = 0; j < categoryQuestions.length; j++) {
-            validQuestions.push(categoryQuestions[j]);
             questionsIds.push(categoryQuestions[j].questionId);
+            quizQuestions.push(categoryQuestions[j]);
         }
     }
 
-    const quiz = await Quiz.build({
-        questionsIds: questionsIds,
-        wrongQuestionsIds: [],
-        correctQuestionsIds: [],
+    const quiz = Quiz.build({
+        ownerId: "",
+        quizQuestions: quizQuestions,
+        wrongQuestions: [],
+        correctQuestions: [],
+        notAnsweredQuestions: [],
         userAnswers: [],
     });
 
     await quiz.save();
 
-    const quizQuestions = [];
-
-    for (let i = 0; i < questionsIds.length; i++) {
-        const question = await Question.find({ questionId: questionsIds[i] });
-        quizQuestions.push(question[0]);
-    }
+    // for (let i = 0; i < questionsIds.length; i++) {
+    //     const question = await Question.find({ questionId: questionsIds[i] });
+    //     quizQuestions.push(question[0]);
+    // }
 
     res.status(200).json({
-        validQuestions: validQuestions,
         quiz: quiz,
         questions: quizQuestions,
     });

@@ -3,6 +3,7 @@ import { updateIfCurrentPlugin } from "mongoose-update-if-current";
 import { QuestionDoc } from "./question";
 
 interface QuizAttrs {
+    id: string;
     ownerId: string;
     wrongQuestions: QuestionDoc[];
     correctQuestions: QuestionDoc[];
@@ -13,6 +14,10 @@ interface QuizAttrs {
 
 interface QuizModel extends mongoose.Model<QuizDoc> {
     build(attrs: QuizAttrs): QuizDoc;
+    findByEvent(event: {
+        id: string;
+        version: number;
+    }): Promise<QuizDoc | null>;
 }
 
 export interface QuizDoc extends mongoose.Document {
@@ -74,7 +79,22 @@ quizSchema.pre("save", async function (next) {
 });
 
 quizSchema.statics.build = (attrs: QuizAttrs) => {
-    return new Quiz(attrs);
+    return new Quiz({
+        _id: attrs.id,
+        ownerId: attrs.ownerId,
+        wrongQuestions: attrs.wrongQuestions,
+        correctQuestions: attrs.correctQuestions,
+        notAnsweredQuestions: attrs.notAnsweredQuestions,
+        quizQuestions: attrs.quizQuestions,
+        userAnswers: attrs.userAnswers,
+    });
+};
+
+quizSchema.statics.findByEvent = (event: { id: string; version: number }) => {
+    return Quiz.findOne({
+        _id: event.id,
+        version: event.version - 1,
+    });
 };
 
 const Quiz = mongoose.model<QuizDoc, QuizModel>("Quiz", quizSchema);

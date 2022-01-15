@@ -8,6 +8,7 @@ interface QuestionAttrs {
     wrongOptions: string[];
     correctOptions: string;
     questionOptions: string[];
+    answerLink: string;
 }
 
 interface QuestionModel extends mongoose.Model<QuestionDoc> {
@@ -21,6 +22,7 @@ interface QuestionDoc extends mongoose.Document {
     wrongOptions: string[];
     correctOptions: string;
     questionOptions: string[];
+    answerLink: string;
     version: number;
 }
 
@@ -48,6 +50,10 @@ const questionSchema = new mongoose.Schema(
         },
         questionOptions: {
             type: [String],
+            required: true,
+        },
+        answerLink: {
+            type: String,
             required: true,
         },
     },

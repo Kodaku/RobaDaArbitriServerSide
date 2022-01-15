@@ -1,6 +1,12 @@
+import { QuestionDoc } from "./models/question";
+import { QuizDoc } from "./models/quiz";
+
 export interface UserType {
+    firebaseId: string;
     userName: string;
     email: string;
     executedQuestionIds: number[];
-    executedQuizIds: string[];
+    notExecutedQuizIds: string[];
+    executedQuizzes: QuizDoc[];
+    wrongQuestions: QuestionDoc[];
 }

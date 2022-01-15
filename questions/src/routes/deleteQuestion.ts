@@ -29,6 +29,7 @@ router.get(
             correctOptions: result.correctOptions,
             wrongOptions: result.wrongOptions,
             questionOptions: result.questionOptions,
+            answerLink: result.answerLink,
         });
 
         res.status(200).send(result);

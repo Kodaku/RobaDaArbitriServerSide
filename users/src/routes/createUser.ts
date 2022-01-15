@@ -44,7 +44,9 @@ router.get("/api/users/create", async (req: Request, res: Response) => {
             userName: user.userName,
             email: user.email,
             executedQuestionIds: user.executedQuestionIds,
-            executedQuizIds: user.executedQuizIds,
+            notExecutedQuizIds: user.notExecutedQuizIds,
+            executedQuizzes: user.executedQuizzes,
+            wrongQuestions: user.wrongQuestions,
         });
 
         console.log(userToSave);
@@ -53,11 +55,14 @@ router.get("/api/users/create", async (req: Request, res: Response) => {
 
         new UserCreatedPublisher(natsWrapper.client).publish({
             id: userToSave.id,
+            firebaseId: userToSave.firebaseId,
             version: userToSave.version,
             userName: userToSave.userName,
             email: userToSave.email,
             executedQuestionIds: userToSave.executedQuestionIds,
-            executedQuizIds: userToSave.executedQuizIds,
+            notExecutedQuizIds: userToSave.notExecutedQuizIds,
+            executedQuizzes: userToSave.executedQuizzes,
+            wrongQuestions: userToSave.wrongQuestions,
         });
         usersLoaded.push(userToSave);
     }
@@ -72,16 +77,21 @@ router.post("/api/users/add", async (req: Request, res: Response) => {
         userName,
         email,
         executedQuestionIds: [],
-        executedQuizIds: [],
+        notExecutedQuizIds: [],
+        executedQuizzes: [],
+        wrongQuestions: [],
     });
     await user.save();
     new UserCreatedPublisher(natsWrapper.client).publish({
         id: user.id,
+        firebaseId: user.firebaseId,
         version: user.version,
         userName: user.userName,
         email: user.email,
         executedQuestionIds: user.executedQuestionIds,
-        executedQuizIds: user.executedQuizIds,
+        notExecutedQuizIds: user.notExecutedQuizIds,
+        executedQuizzes: user.executedQuizzes,
+        wrongQuestions: user.wrongQuestions,
     });
     res.status(201).send(user);
 });

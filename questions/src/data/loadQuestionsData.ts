@@ -25,6 +25,7 @@ export const loadQuestionData = async (questions: QuestionType[]) => {
             wrongOptions: question.wrongAnswers,
             correctOptions: question.correctAnswers,
             questionOptions: question.questionOptions,
+            answerLink: question.answerLink,
         });
 
         await questionToSave.save();
@@ -39,6 +40,7 @@ export const loadQuestionData = async (questions: QuestionType[]) => {
             wrongOptions: questionToSave.wrongOptions,
             correctOptions: questionToSave.correctOptions,
             questionOptions: questionToSave.questionOptions,
+            answerLink: questionToSave.answerLink,
         });
     }
 };

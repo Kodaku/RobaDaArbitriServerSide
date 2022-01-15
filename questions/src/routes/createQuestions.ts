@@ -30,6 +30,7 @@ router.get("/api/questions/create", async (req: Request, res: Response) => {
             wrongOptions: question.wrongAnswers,
             correctOptions: question.correctAnswers,
             questionOptions: question.questionOptions,
+            answerLink: question.answerLink,
         });
 
         await questionToSave.save();
@@ -43,6 +44,7 @@ router.get("/api/questions/create", async (req: Request, res: Response) => {
             wrongOptions: questionToSave.wrongOptions,
             correctOptions: questionToSave.correctOptions,
             questionOptions: questionToSave.questionOptions,
+            answerLink: questionToSave.answerLink,
         });
 
         questionsLoaded.push(questionToSave);
@@ -59,6 +61,7 @@ router.post("/api/questions/add", async (req: Request, res: Response) => {
         wrongOptions,
         correctOptions,
         questionOptions,
+        answerLink,
     } = req.body;
     const question = Question.build({
         questionId,
@@ -67,6 +70,7 @@ router.post("/api/questions/add", async (req: Request, res: Response) => {
         wrongOptions,
         correctOptions,
         questionOptions,
+        answerLink,
     });
     await question.save();
     new QuestionCreatedPublisher(natsWrapper.client).publish({
@@ -78,6 +82,7 @@ router.post("/api/questions/add", async (req: Request, res: Response) => {
         wrongOptions: question.wrongOptions,
         correctOptions: question.correctOptions,
         questionOptions: question.questionOptions,
+        answerLink: question.answerLink,
     });
     res.status(201).send(question);
 });

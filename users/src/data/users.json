@@ -2,25 +2,33 @@
     {
         "userName": "mario",
         "email": "mario@bros.com",
-        "executedQuizIds": [],
-        "executedQuestionIds": []
+        "notExecutedQuizIds": [],
+        "executedQuestionIds": [],
+        "executedQuizzes": [],
+        "wrongQuestions": []
     },
     {
         "userName": "luigi",
         "email": "luigi@bros.com",
-        "executedQuizIds": [],
-        "executedQuestionIds": []
+        "notExecutedQuizIds": [],
+        "executedQuestionIds": [],
+        "executedQuizzes": [],
+        "wrongQuestions": []
     },
     {
         "userName": "natsu",
         "email": "natsu@fairytail.com",
-        "executedQuizIds": [],
-        "executedQuestionIds": []
+        "notExecutedQuizIds": [],
+        "executedQuestionIds": [],
+        "executedQuizzes": [],
+        "wrongQuestions": []
     },
     {
         "userName": "kirito",
         "email": "kirito@sao.com",
-        "executedQuizIds": [],
-        "executedQuestionIds": []
+        "notExecutedQuizIds": [],
+        "executedQuestionIds": [],
+        "executedQuizzes": [],
+        "wrongQuestions": []
     }
 ]

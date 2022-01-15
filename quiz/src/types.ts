@@ -1,3 +1,5 @@
+import { QuestionDoc } from "./models/question";
+
 export interface QuestionType {
     id: string;
     questionId: number;

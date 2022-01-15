@@ -4,6 +4,11 @@ import { app } from "./app";
 import { loadUsersData } from "./data/loadUsersData";
 import { users } from "./data/readUsersData";
 import { UserUpdatedListener } from "./events/listeners/user-updated-listener";
+import { QuestionCreatedListener } from "./events/listeners/question-created-listener";
+import { QuestionUpdatedListener } from "./events/listeners/question-updated-listener";
+import { QuizCreatedListener } from "./events/listeners/quiz-created-listener";
+import { QuizUpdatedListener } from "./events/listeners/quiz-updated-listener";
+import { QuestionDeletedListener } from "./events/listeners/question-deleted-listener";
 
 // console.log(questions);
 
@@ -16,7 +21,7 @@ import { UserUpdatedListener } from "./events/listeners/user-updated-listener";
 // }
 const start = async () => {
     if (!process.env.USERS_MONGO_URI) {
-        throw new Error("Quiz Database not defined");
+        throw new Error("Users Database not defined");
     }
 
     if (!process.env.NATS_URL) {
@@ -47,6 +52,11 @@ const start = async () => {
         process.on("SIGTERM", () => natsWrapper.client.close());
 
         new UserUpdatedListener(natsWrapper.client).listen();
+        new QuestionCreatedListener(natsWrapper.client).listen();
+        new QuestionUpdatedListener(natsWrapper.client).listen();
+        new QuestionDeletedListener(natsWrapper.client).listen();
+        new QuizCreatedListener(natsWrapper.client).listen();
+        new QuizUpdatedListener(natsWrapper.client).listen();
 
         // const DB = process.env.DATABASE.replace('<PASSWORD>', process.env.DB_PASSWORD);
         mongoose.connect(process.env.USERS_MONGO_URI, async () => {

@@ -15,7 +15,7 @@ import { app } from "./app";
 // }
 const start = async () => {
     if (!process.env.QUESTIONS_MONGO_URI) {
-        throw new Error("Quiz Database not defined");
+        throw new Error("Questions Database not defined");
     }
 
     if (!process.env.NATS_URL) {

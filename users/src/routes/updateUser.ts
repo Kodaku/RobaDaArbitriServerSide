@@ -7,7 +7,10 @@ const router = Router();
 
 router.post("/api/users/:id", async (req: Request, res: Response) => {
     const id = req.params.id;
-    const { userName, email, executedQuestionIds, executedQuizIds } = req.body;
+    const { userName, email, executedQuestionIds, notExecutedQuizIds } =
+        req.body;
+    const executedQuizzes = req.body.executedQuizzes;
+    const wrongQuestions = req.body.wrongQuestions;
 
     const user = await User.findById(id);
 
@@ -19,18 +22,23 @@ router.post("/api/users/:id", async (req: Request, res: Response) => {
         userName,
         email,
         executedQuestionIds,
-        executedQuizIds,
+        notExecutedQuizIds,
+        executedQuizzes,
+        wrongQuestions,
     });
 
     await user.save();
 
     new UserUpdatedPublisher(natsWrapper.client).publish({
         id: user.id,
+        firebaseId: user.firebaseId,
         version: user.version,
         userName: userName,
         email: email,
         executedQuestionIds: executedQuestionIds,
-        executedQuizIds: executedQuizIds,
+        notExecutedQuizIds: notExecutedQuizIds,
+        executedQuizzes: executedQuizzes,
+        wrongQuestions: wrongQuestions,
     });
 
     res.status(200).send(user);
