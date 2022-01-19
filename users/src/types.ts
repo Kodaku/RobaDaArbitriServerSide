@@ -10,3 +10,19 @@ export interface UserType {
     executedQuizzes: QuizDoc[];
     wrongQuestions: QuestionDoc[];
 }
+
+export interface QuestionType {
+    questionId: number;
+    questionText: string;
+    questionCategory: string;
+    wrongAnswers: string[];
+    correctAnswers: string;
+    questionOptions: string[];
+    answerLink: string;
+}
+
+export interface Answer {
+    questionId: number;
+    isCorrect: boolean;
+    userAnswer?: string;
+}

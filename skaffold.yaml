@@ -1,34 +1,18 @@
 apiVersion: skaffold/v2alpha3
 kind: Config
 deploy:
-  kubectl:
-    manifests:
-      - infra/k8s/*
+    kubectl:
+        manifests:
+            - infra/k8s/*
 build:
-  local:
-    push: false
-  artifacts:
-    - image: axelmastroianni/questions
-      context: questions
-      docker:
-        dockerfile: Dockerfile
-      sync:
-        manual:
-          - src: 'src/**/.ts'
-            dest: .
-    - image: axelmastroianni/quiz
-      context: quiz
-      docker:
-        dockerfile: Dockerfile
-      sync:
-        manual:
-          - src: 'src/**/.ts'
-            dest: .
-    - image: axelmastroianni/users
-      context: users
-      docker:
-        dockerfile: Dockerfile
-      sync:
-        manual:
-          - src: 'src/**/.ts'
-            dest: .
+    local:
+        push: false
+    artifacts:
+        - image: axelmastroianni/users
+          context: users
+          docker:
+              dockerfile: Dockerfile
+          sync:
+              manual:
+                  - src: "src/**/.ts"
+                    dest: .

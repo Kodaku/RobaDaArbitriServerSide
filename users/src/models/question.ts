@@ -2,7 +2,6 @@ import mongoose from "mongoose";
 import { updateIfCurrentPlugin } from "mongoose-update-if-current";
 
 interface QuestionAttrs {
-    id: string;
     questionId: number;
     questionText: string;
     questionCategory: string;
@@ -14,10 +13,6 @@ interface QuestionAttrs {
 
 interface QuestionModel extends mongoose.Model<QuestionDoc> {
     build(attrs: QuestionAttrs): QuestionDoc;
-    findByEvent(event: {
-        id: string;
-        version: number;
-    }): Promise<QuestionDoc | null>;
 }
 
 export interface QuestionDoc extends mongoose.Document {
@@ -81,26 +76,7 @@ questionSchema.pre("save", async function (next) {
 });
 
 questionSchema.statics.build = (attrs: QuestionAttrs) => {
-    return new Question({
-        _id: attrs.id,
-        questionId: attrs.questionId,
-        questionText: attrs.questionText,
-        questionCategory: attrs.questionCategory,
-        wrongOptions: attrs.wrongOptions,
-        correctOptions: attrs.correctOptions,
-        questionOptions: attrs.questionOptions,
-        answerLink: attrs.answerLink,
-    });
-};
-
-questionSchema.statics.findByEvent = (event: {
-    id: string;
-    version: number;
-}) => {
-    return Question.findOne({
-        _id: event.id,
-        version: event.version - 1,
-    });
+    return new Question(attrs);
 };
 
 const Question = mongoose.model<QuestionDoc, QuestionModel>(

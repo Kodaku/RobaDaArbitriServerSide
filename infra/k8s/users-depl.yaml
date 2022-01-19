@@ -20,14 +20,6 @@ spec:
                       #   value: 'mongodb+srv://axel:<PASSWORD>@cluster0.s6xgy.mongodb.net/roba-da-arbitri/users?retryWrites=true&w=majority'
                       # - name: DB_PASSWORD
                       #   value: 0bq5pDpHwD2NHCpp
-                      - name: NATS_CLIENT_ID
-                        valueFrom:
-                            fieldRef:
-                                fieldPath: metadata.name
-                      - name: NATS_URL
-                        value: "http://nats-srv:4222"
-                      - name: NATS_CLUSTER_ID
-                        value: robadaarbitri
                       - name: USERS_MONGO_URI
                         value: "mongodb://users-mongo-srv:27017/users"
 ---
