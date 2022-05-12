@@ -28,6 +28,7 @@ kind: Service
 metadata:
     name: users-srv
 spec:
+    type: NodePort
     selector:
         app: users
     ports:

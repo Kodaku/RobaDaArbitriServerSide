@@ -1,4 +1,4 @@
-import mongoose from "mongoose";
+import mongoose, { mongo } from "mongoose";
 import { app } from "./app";
 
 // console.log(questions);
@@ -11,17 +11,22 @@ import { app } from "./app";
 //     throw new Error("Database password not defined")
 // }
 const start = async () => {
-    if (!process.env.USERS_MONGO_URI) {
-        throw new Error("Users Database not defined");
-    }
+    // if (!process.env.USERS_MONGO_URI) {
+    //     throw new Error("Users Database not defined");
+    // }
 
     try {
-
         // const DB = process.env.DATABASE.replace('<PASSWORD>', process.env.DB_PASSWORD);
-        mongoose.connect(process.env.USERS_MONGO_URI, async () => {
-            console.log("Connceted to the USER database!");
-            // await loadUsersData(users);
-            // console.log("Initial Users Data Successfully Loaded");
+        // mongoose.connect(process.env.USERS_MONGO_URI, async () => {
+        //     console.log("Connceted to the USER database!");
+        //     // await loadUsersData(users);
+        //     // console.log("Initial Users Data Successfully Loaded");
+        // });
+        // await MongoClient.connect("mongodb://localhost:27017/users", () => {
+        //     console.log("Connected to users database");
+        // });
+        mongoose.connect("mongodb://localhost:27017/users", async () => {
+            console.log("Connected to the USER database");
         });
     } catch (err) {
         console.log(err);

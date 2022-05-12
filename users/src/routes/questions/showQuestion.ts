@@ -17,7 +17,7 @@ router.get(
             throw new Error("Question Not found");
         }
 
-        res.status(201).send(question);
+        res.status(200).send(question);
     }
 );
 

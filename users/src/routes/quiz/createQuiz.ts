@@ -61,8 +61,7 @@ router.get("/api/quiz/generic/:userId", async (req: Request, res: Response) => {
         );
         //Check if the extracted index is already in the quizQuestionIds array
         const index = quizQuestionsIds.findIndex(
-            (quizQuestionId) =>
-                quizQuestions[questionIndex].questionId === quizQuestionId - 1
+            (quizQuestionId) => questionIndex === quizQuestionId
         );
         // console.log(questionIndex);
         if (index < 0) {

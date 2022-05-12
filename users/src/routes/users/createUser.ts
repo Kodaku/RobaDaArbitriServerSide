@@ -53,7 +53,9 @@ router.post("/api/users/add", async (req: Request, res: Response) => {
     });
     await user.save();
 
-    res.status(201).send(user);
+    res.status(201).json({
+        user: user,
+    });
 });
 
 export { router as createUserRouter };

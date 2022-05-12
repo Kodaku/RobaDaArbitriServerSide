@@ -11,7 +11,7 @@ router.get("/api/users/delete/:userId", async (req: Request, res: Response) => {
     // console.log(result);
 
     if (!result) {
-        throw new Error("Error while deleting the question");
+        throw new Error("Error while deleting the user");
     }
 
     res.status(200).send(result);
